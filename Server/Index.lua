@@ -1,3 +1,10 @@
+local IDE_DEV = true
+
+if IDE_DEV then
+    local __editor = Package.Require("../hook.lua")
+    __editor.setup()
+end
+
 local fr = Package.Require("FileReader.lua")
 
 local pkgData = {}
