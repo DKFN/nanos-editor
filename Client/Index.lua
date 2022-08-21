@@ -11,10 +11,17 @@ Input.Register("CrtlEditor", "LeftControl")
 Input.Register("CrtlEditor_ReloadAllPackages", "R")
 Input.Register("CrtlEditor_SaveCurrentFile", "S")
 
+local currentEditingFile = nil;
+
 local handleAsKFileContents = function(data)
     local parsedData = JSON.parse(data)
     Package.Log("Received asked content from parsed content"..NanosUtils.Dump(parsedData))
-    Events.CallRemote("NIDE:JS_ASK_FILE_CONTENTS", parsedData.packageName, parsedData.filePath)
+    Events.CallRemote("NIDE:JS_ASK_FILE_CONTENTS", parsedData.packageName, parsedData.filePath, parsedData)
+    currentEditingFile = {
+        packageName = parsedData.packageName,
+        filePath = parsedData.filePath,
+        ext = parsedData.ext
+    }
 end
 
 -- Editor init
@@ -27,10 +34,24 @@ Input.Bind("OpenEditor", InputEvent.Pressed, function()
         )
 
         editorWebUi:Subscribe("NIDE:CLIENT_ASK_FILE_CONTENTS", handleAsKFileContents)
+        editorWebUi:Subscribe("NIDE:DELETE_FILE", function()
+            if (currentEditingFile == nil) then
+                Package.Error("No file is selected")
+            else
+                Events.CallRemote("NIDE:SERVER_DELETE_FILE", currentEditingFile)
+            end
+        end)
+        editorWebUi:Subscribe("NIDE:SAVE_FILE", function(fileContent)
+            Events.CallRemote("NIDE:SERVER_SAVE_FILE", currentEditingFile, fileContent)
+        end)
+        editorWebUi:Subscribe("NIDE:PKG_RELOAD", function()
+            Events.CallRemote("NIDE:SERVER_PKG_RELOAD", currentEditingFile.packageName)
+        end)
         editorWebUi:Subscribe("Ready", function()
             Events.CallRemote("NIDE:CLIENT_INIT_IDE")
             Client.SetMouseEnabled(true)
             Client.SetInputEnabled(true)
+            Client.SetChatVisibility(false)
         end)
         editorWebUi:SetFocus()
     else
@@ -43,6 +64,7 @@ Input.Bind("OpenEditor", InputEvent.Pressed, function()
             end, 100)
             Client.SetMouseEnabled(false)
             Client.SetInputEnabled(true)
+            Client.SetChatVisibility(true)
         end
     end
 end)
@@ -57,8 +79,11 @@ end)
 
 -- File browsing
 Events.Subscribe("NIDE:CLIENT_SEND_FILE_CONTENTS", function(fileContent)
-    editorWebUi:CallEvent("NIDE:JS_SEND_SEND_FILE_CONTENTS", fileContent)
+    editorWebUi:CallEvent("NIDE:JS_SEND_SEND_FILE_CONTENTS", JSON.stringify({fileContent, currentEditingFile.ext}))
 end)
+
+-- Toolbar
+Events.Subscribe("")
 
 -- Control actions
 Input.Bind("ControlMode", Input.Pressed, function()
