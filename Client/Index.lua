@@ -32,7 +32,7 @@ Input.Bind("OpenEditor", InputEvent.Pressed, function()
     if (editorWebUi == nil) then
         editorWebUi = WebUI(
             "NanosIDE",
-            EDITOR_GUI_DEV and "http://localhost:4173/" or "file://legacy/index.html",
+            EDITOR_GUI_DEV and "http://localhost:4173/" or "file://dist/index.html",
             true
         )
         attachEventsToWebUi(editorWebUi)

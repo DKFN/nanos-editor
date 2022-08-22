@@ -4,7 +4,6 @@ end
 
 Events.Subscribe("NIDE:JS_ASK_FILE_CONTENTS", function (ply, pkgName, filePath)
     local path = buildFilePath(pkgName, filePath)
-    Package.Log("Opening : "..path)
     local file = File(path)
     file:ReadAsync(file:Size(), function(fileContent)
         -- Package.Log("File content : "..fileContent)
@@ -14,7 +13,6 @@ Events.Subscribe("NIDE:JS_ASK_FILE_CONTENTS", function (ply, pkgName, filePath)
 end)
 
 Events.Subscribe("NIDE:SERVER_DELETE_FILE", function(ply, fileData)
-    Package.Log("Asked to delete file with data : "..NanosUtils.Dump(fileData))
     local ret = File.Remove(buildFilePath(fileData.packageName, fileData.filePath))
     Package.Log("Returned : "..ret)
 end)
