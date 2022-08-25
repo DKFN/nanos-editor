@@ -8,3 +8,6 @@ local editor = Package.Require("nanos-editor/hook.lua")
 editor.setup()
 ```
 You can now press `F8` to open the editor in the game
+
+## GUI source
+In this repository the GUI is compiled, if you want to see the uncompied version of the GUI go here: https://github.com/DKFN/nanos-ide-gui
