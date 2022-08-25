@@ -7,3 +7,4 @@ You must include this script in one server file to allow the editor to view and 
 local editor = Package.Require("nanos-editor/hook.lua")
 editor.setup()
 ```
+You can now press `F8` to open the editor in the game
