@@ -3,6 +3,6 @@ You must include this script in one server file to allow the editor to view and 
 
 `Server/Index.lua`
 ```lua
-local editor = Package.Require("nanos-ide/hook.lua")
+local editor = Package.Require("nanos-editor/hook.lua")
 editor.setup()
 ```

@@ -1,7 +1,7 @@
 # package configurations
 [package]
     # package name
-    name =                 "nanos-ide"
+    name =                 "nanos-editor"
     # contributors
     author =               "dkfn"
     # version
