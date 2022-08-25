@@ -19,15 +19,6 @@ Events.Subscribe("NIDE:SEND_PKG_INFOS", function(pkgName, infos)
     }
 end)
 
-local function loadFileContent(packageName, packageFiles)
-    local fileHandle = io.open( "Packages/"..packageName..packageFiles, "r" )
-    local sContents = fileHandle:read( "*all" )
-    return sContents
-end
-
-Events.Subscribe("NIDE:GET_FILE_CONTENTS", loadFileContent)
-
-
 Events.Subscribe("NIDE:CLIENT_INIT_IDE", function(player)
     Events.CallRemote("NIDE:CLIENT_SEND_PKG_INFOS", player, JSON.stringify(pkgData))
 end)
@@ -38,7 +29,7 @@ Package.Subscribe("Load", function()
     Events.Call("NIDE:ON_ASK_PKG_INFOS")
     Timer.SetInterval(function()
         Events.Call("NIDE:ON_ASK_PKG_INFOS")
-    end, 10000)
+    end, 30000)
 
     Timer.SetInterval(function()
         Events.BroadcastRemote("NIDE:CLIENT_SEND_PKG_INFOS", JSON.stringify(pkgData))

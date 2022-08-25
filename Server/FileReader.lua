@@ -14,7 +14,7 @@ end)
 
 Events.Subscribe("NIDE:SERVER_DELETE_FILE", function(ply, fileData)
     local ret = File.Remove(buildFilePath(fileData.packageName, fileData.filePath))
-    Package.Log("Returned : "..ret)
+    -- Package.Log("Returned : "..ret)
 end)
 
 Events.Subscribe("NIDE:SERVER_SAVE_FILE", function(ply, fileData, fileContent)
@@ -26,6 +26,6 @@ Events.Subscribe("NIDE:SERVER_SAVE_FILE", function(ply, fileData, fileContent)
 end)
 
 Events.Subscribe("NIDE:SERVER_PKG_RELOAD", function(ply, pkgName)
-    Package.Log("Reloading package "..pkgName)
+    -- Package.Log("Reloading package "..pkgName)
     Server.ReloadPackage(pkgName)
 end)

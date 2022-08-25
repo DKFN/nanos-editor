@@ -1,7 +1,6 @@
 Package.Require("./WebUIEvents.lua")
 
 local EDITOR_GUI_DEV = false;
-local editorWindowOpen = false;
 local crtlMode = false
 
 local editorWebUi;
@@ -17,7 +16,7 @@ currentEditingFile = nil;
 
 handleAsKFileContents = function(data)
     local parsedData = JSON.parse(data)
-    Package.Log("Received asked content from parsed content"..NanosUtils.Dump(parsedData))
+    -- Package.Log("Received asked content from parsed content"..NanosUtils.Dump(parsedData))
     Events.CallRemote("NIDE:JS_ASK_FILE_CONTENTS", parsedData.packageName, parsedData.filePath, parsedData)
     currentEditingFile = {
         packageName = parsedData.packageName,
@@ -32,7 +31,7 @@ Input.Bind("OpenEditor", InputEvent.Pressed, function()
     if (editorWebUi == nil) then
         editorWebUi = WebUI(
             "NanosIDE",
-            EDITOR_GUI_DEV and "http://localhost:4173/" or "file://dist/index.html",
+            EDITOR_GUI_DEV and "http://localhost:1234/" or "file://dist/index.html",
             true
         )
         attachEventsToWebUi(editorWebUi)
@@ -51,7 +50,7 @@ Input.Bind("OpenEditor", InputEvent.Pressed, function()
 end)
 
 Events.Subscribe("NIDE:CLIENT_SEND_PKG_INFOS", function(_pkgData)
-    Package.Log("Received frontend data for pkg :< "..NanosUtils.Dump(_pkgData))
+    -- Package.Log("Received frontend data for pkg :< "..NanosUtils.Dump(_pkgData))
     if editorWebUi then
         pkgData = JSON.parse(_pkgData)
         editorWebUi:CallEvent("NIDE:JS_SEND_PKG_INFOS", _pkgData)
